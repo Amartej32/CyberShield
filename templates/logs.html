@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Security Logs - CyberShield</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            🛡️ CyberShield
+        </div>
+
+
+        <nav>
+
+    <a href="/"
+       class="{% if request.path == '/' %}active{% endif %}">
+        Dashboard
+    </a>
+
+    <a href="/logs"
+       class="{% if request.path == '/logs' %}active{% endif %}">
+        Security Logs
+    </a>
+
+    <a href="/add-log"
+       class="{% if request.path == '/add-log' %}active{% endif %}">
+        Add Security Event
+    </a>
+
+    <a href="/threats"
+       class="{% if request.path == '/threats' %}active{% endif %}">
+        Threats
+    </a>
+
+    <a href="/investigations"
+       class="{% if request.path == '/investigations' or request.path.startswith('/investigate/') %}active{% endif %}">
+        Investigations
+    </a>
+
+    <a href="/reports"
+       class="{% if request.path == '/reports' %}active{% endif %}">
+        Reports
+    </a>
+
+</nav>
+
+    </aside>
+
+
+    <!-- Main Content -->
+
+    <main class="main-content">
+
+
+        <!-- Header -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Security Logs
+                </h1>
+
+                <p>
+                    View and monitor recorded security events.
+                </p>
+
+            </div>
+
+
+            <div class="system-status">
+                ● System Online
+            </div>
+
+        </header>
+
+
+        <!-- Logs -->
+
+        <section class="recent-events">
+
+            <div class="section-header">
+
+                <h2>
+                    All Security Events
+                </h2>
+
+                <a href="/add-log">
+                    + Add Security Event
+                </a>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Time
+                            </th>
+
+                            <th>
+                                Event
+                            </th>
+
+                            <th>
+                                Source IP
+                            </th>
+
+                            <th>
+                                Severity
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for log in logs %}
+
+                        <tr>
+
+                            <td>
+                                {{ log["id"] }}
+                            </td>
+
+                            <td>
+                                {{ log["timestamp"] }}
+                            </td>
+
+                            <td>
+                                {{ log["event"] }}
+                            </td>
+
+                            <td>
+                                {{ log["ip_address"] }}
+                            </td>
+
+
+                            <td>
+
+                                {% if log["severity"] == "Critical" %}
+
+                                    <span class="danger">
+                                        Critical
+                                    </span>
+
+                                {% elif log["severity"] == "Medium" %}
+
+                                    <span class="warning">
+                                        Medium
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="safe">
+                                        Low
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                        {% if not logs %}
+
+                        <tr>
+
+                            <td colspan="5">
+                                No security events found.
+                            </td>
+
+                        </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</body>
+
+</html>

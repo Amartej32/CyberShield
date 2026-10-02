@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Add Security Event - CyberShield</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            🛡️ CyberShield
+        </div>
+
+        <nav>
+
+            <a href="/"
+               class="{% if request.path == '/' %}active{% endif %}">
+                Dashboard
+            </a>
+
+            <a href="/logs"
+               class="{% if request.path == '/logs' %}active{% endif %}">
+                Security Logs
+            </a>
+
+            <a href="/add-log"
+               class="{% if request.path == '/add-log' %}active{% endif %}">
+                Add Security Event
+            </a>
+
+            <a href="/threats"
+               class="{% if request.path == '/threats' %}active{% endif %}">
+                Threats
+            </a>
+
+            <a href="/investigations"
+               class="{% if request.path == '/investigations' or request.path.startswith('/investigate/') %}active{% endif %}">
+                Investigations
+            </a>
+
+            <a href="/reports"
+               class="{% if request.path == '/reports' %}active{% endif %}">
+                Reports
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- Main Content -->
+
+    <main class="main-content">
+
+        <!-- Header -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Add Security Event
+                </h1>
+
+                <p>
+                    Manually add a security event to CyberShield.
+                </p>
+
+            </div>
+
+            <div class="system-status">
+                ● System Online
+            </div>
+
+        </header>
+
+
+        <!-- Form -->
+
+        <section class="form-section">
+
+            <form method="POST">
+
+                <label for="event">
+                    Security Event
+                </label>
+
+                <input
+                    type="text"
+                    id="event"
+                    name="event"
+                    placeholder="Example: Failed Login Attempt"
+                    required
+                >
+
+
+                <label for="ip_address">
+                    IP Address
+                </label>
+
+                <input
+                    type="text"
+                    id="ip_address"
+                    name="ip_address"
+                    placeholder="Example: 192.168.1.50"
+                    required
+                >
+
+
+                <label for="severity">
+                    Severity
+                </label>
+
+                <select
+                    id="severity"
+                    name="severity"
+                    required
+                >
+
+                    <option value="">
+                        Select Severity
+                    </option>
+
+                    <option value="Low">
+                        Low
+                    </option>
+
+                    <option value="Medium">
+                        Medium
+                    </option>
+
+                    <option value="Critical">
+                        Critical
+                    </option>
+
+                </select>
+
+
+                <button type="submit">
+                    Add Security Event
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

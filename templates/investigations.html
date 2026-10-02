@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Investigations - CyberShield</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            🛡️ CyberShield
+        </div>
+
+
+        <nav>
+
+            <a href="/"
+               class="{% if request.path == '/' %}active{% endif %}">
+                Dashboard
+            </a>
+
+            <a href="/logs"
+               class="{% if request.path == '/logs' %}active{% endif %}">
+                Security Logs
+            </a>
+
+            <a href="/add-log"
+               class="{% if request.path == '/add-log' %}active{% endif %}">
+                Add Security Event
+            </a>
+
+            <a href="/threats"
+               class="{% if request.path == '/threats' %}active{% endif %}">
+                Threats
+            </a>
+
+            <a href="/investigations"
+               class="{% if request.path == '/investigations' or request.path.startswith('/investigate/') %}active{% endif %}">
+                Investigations
+            </a>
+
+            <a href="/reports"
+               class="{% if request.path == '/reports' %}active{% endif %}">
+                Reports
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- Main Content -->
+
+    <main class="main-content">
+
+
+        <!-- Header -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Security Investigations
+                </h1>
+
+                <p>
+                    Investigate suspicious and critical security events.
+                </p>
+
+            </div>
+
+
+            <div class="system-status">
+                ● System Online
+            </div>
+
+        </header>
+
+
+        <!-- Investigation Summary -->
+
+        <section class="dashboard-cards">
+
+            <div class="card">
+
+                <h3>
+                    Investigations
+                </h3>
+
+                <div class="card-number">
+                    {{ investigations|length }}
+                </div>
+
+                <p>
+                    Events requiring review
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Critical Alerts
+                </h3>
+
+                <div class="card-number">
+                    {{ critical_count }}
+                </div>
+
+                <p>
+                    Critical events
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- Investigation List -->
+
+        <section class="recent-events">
+
+            <div class="section-header">
+
+                <h2>
+                    Investigation Queue
+                </h2>
+
+                <a href="/threats">
+                    View Threats
+                </a>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Event
+                            </th>
+
+                            <th>
+                                Source IP
+                            </th>
+
+                            <th>
+                                Severity
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for investigation in investigations %}
+
+                        <tr>
+
+                            <td>
+                                {{ investigation["id"] }}
+                            </td>
+
+                            <td>
+                                {{ investigation["event"] }}
+                            </td>
+
+                            <td>
+                                {{ investigation["ip_address"] }}
+                            </td>
+
+                            <td>
+
+                                {% if investigation["severity"] == "Critical" %}
+
+                                    <span class="danger">
+                                        Critical
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="warning">
+                                        Medium
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if investigation["investigation_status"] == "Resolved" %}
+
+                                    <span class="safe">
+                                        Resolved
+                                    </span>
+
+                                {% elif investigation["investigation_status"] == "Investigating" %}
+
+                                    <span class="warning">
+                                        Investigating
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="danger">
+                                        Open
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                <a href="/investigate/{{ investigation['id'] }}">
+                                    Investigate
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                        {% if not investigations %}
+
+                        <tr>
+
+                            <td colspan="6">
+                                No investigations found.
+                            </td>
+
+                        </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</body>
+
+</html>

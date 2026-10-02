@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Reports & Analytics - CyberShield</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            🛡️ CyberShield
+        </div>
+
+
+        <nav>
+
+            <a href="/"
+               class="{% if request.path == '/' %}active{% endif %}">
+                Dashboard
+            </a>
+
+            <a href="/logs"
+               class="{% if request.path == '/logs' %}active{% endif %}">
+                Security Logs
+            </a>
+
+            <a href="/add-log"
+               class="{% if request.path == '/add-log' %}active{% endif %}">
+                Add Security Event
+            </a>
+
+            <a href="/threats"
+               class="{% if request.path == '/threats' %}active{% endif %}">
+                Threats
+            </a>
+
+            <a href="/investigations"
+               class="{% if request.path == '/investigations' or request.path.startswith('/investigate/') %}active{% endif %}">
+                Investigations
+            </a>
+
+            <a href="/reports"
+               class="{% if request.path == '/reports' %}active{% endif %}">
+                Reports
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- Main Content -->
+
+    <main class="main-content">
+
+
+        <!-- Header -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Reports & Analytics
+                </h1>
+
+                <p>
+                    Analyze security events and threat activity.
+                </p>
+
+            </div>
+
+
+            <div class="system-status">
+                ● System Online
+            </div>
+
+        </header>
+
+
+        <!-- Summary Cards -->
+
+        <section class="dashboard-cards">
+
+
+            <div class="card">
+
+                <h3>
+                    Total Events
+                </h3>
+
+                <div class="card-number">
+                    {{ total_events }}
+                </div>
+
+                <p>
+                    Recorded security events
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Low Severity
+                </h3>
+
+                <div class="card-number">
+                    {{ low_count }}
+                </div>
+
+                <p>
+                    Normal activity
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Medium Severity
+                </h3>
+
+                <div class="card-number">
+                    {{ medium_count }}
+                </div>
+
+                <p>
+                    Suspicious activity
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Critical Alerts
+                </h3>
+
+                <div class="card-number">
+                    {{ critical_count }}
+                </div>
+
+                <p>
+                    Critical events
+                </p>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- Event Analytics -->
+
+        <section class="recent-events">
+
+            <div class="section-header">
+
+                <h2>
+                    Event Distribution
+                </h2>
+
+            </div>
+
+
+            <div style="max-width: 700px; margin: auto;">
+
+                <canvas id="eventChart"></canvas>
+
+            </div>
+
+        </section>
+
+
+        <!-- Recent Events -->
+
+        <section class="recent-events">
+
+            <div class="section-header">
+
+                <h2>
+                    Recent Security Events
+                </h2>
+
+                <a href="/logs">
+                    View All Logs
+                </a>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Time
+                            </th>
+
+                            <th>
+                                Event
+                            </th>
+
+                            <th>
+                                Source IP
+                            </th>
+
+                            <th>
+                                Severity
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for log in recent_logs %}
+
+                        <tr>
+
+                            <td>
+                                {{ log["id"] }}
+                            </td>
+
+                            <td>
+                                {{ log["timestamp"] }}
+                            </td>
+
+                            <td>
+                                {{ log["event"] }}
+                            </td>
+
+                            <td>
+                                {{ log["ip_address"] }}
+                            </td>
+
+                            <td>
+
+                                {% if log["severity"] == "Critical" %}
+
+                                    <span class="danger">
+                                        Critical
+                                    </span>
+
+                                {% elif log["severity"] == "Medium" %}
+
+                                    <span class="warning">
+                                        Medium
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="safe">
+                                        Low
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                        {% if not recent_logs %}
+
+                        <tr>
+
+                            <td colspan="5">
+                                No security events found.
+                            </td>
+
+                        </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- Chart -->
+
+    <script>
+
+        const eventLabels = {{ event_labels | tojson }};
+
+        const eventCounts = {{ event_counts | tojson }};
+
+
+        const ctx = document
+            .getElementById("eventChart");
+
+
+        new Chart(ctx, {
+
+            type: "bar",
+
+            data: {
+
+                labels: eventLabels,
+
+                datasets: [{
+
+                    label: "Number of Events",
+
+                    data: eventCounts,
+
+                    borderWidth: 1
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
+
+                    }
+
+                },
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+
+                            stepSize: 1
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>CyberShield Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            🛡️ CyberShield
+        </div>
+
+
+        <nav>
+
+            <a href="/"
+               class="{% if request.path == '/' %}active{% endif %}">
+                Dashboard
+            </a>
+
+            <a href="/logs">
+                Security Logs
+            </a>
+
+            <a href="/add-log">
+                Add Security Event
+            </a>
+
+            <a href="/threats">
+                Threats
+            </a>
+
+            <a href="/investigations">
+                Investigations
+            </a>
+
+            <a href="/reports">
+                Reports
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- Main Content -->
+
+    <main class="main-content">
+
+
+        <!-- Header -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Security Dashboard
+                </h1>
+
+                <p>
+                    Monitor and investigate security events.
+                </p>
+
+            </div>
+
+
+            <div class="system-status">
+                ● System Online
+            </div>
+
+        </header>
+
+
+        <!-- Dashboard Cards -->
+
+        <section class="dashboard-cards">
+
+
+            <div class="card">
+
+                <h3>
+                    Total Events
+                </h3>
+
+                <div class="card-number">
+                    {{ total_events }}
+                </div>
+
+                <p>
+                    Security events detected
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Threats
+                </h3>
+
+                <div class="card-number">
+                    {{ threats }}
+                </div>
+
+                <p>
+                    Potential threats
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Critical Alerts
+                </h3>
+
+                <div class="card-number">
+                    {{ critical }}
+                </div>
+
+                <p>
+                    Require investigation
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    System Status
+                </h3>
+
+                <div class="card-number">
+                    Safe
+                </div>
+
+                <p>
+                    Monitoring active
+                </p>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- Recent Security Events -->
+
+        <section class="recent-events">
+
+
+            <div class="section-header">
+
+                <h2>
+                    Recent Security Events
+                </h2>
+
+                <a href="/logs">
+                    View All Logs
+                </a>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Time
+                            </th>
+
+                            <th>
+                                Event
+                            </th>
+
+                            <th>
+                                Source
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% for log in logs %}
+
+                        <tr>
+
+                            <td>
+                                {{ log["timestamp"] }}
+                            </td>
+
+                            <td>
+                                {{ log["event"] }}
+                            </td>
+
+                            <td>
+                                {{ log["ip_address"] }}
+                            </td>
+
+                            <td>
+
+
+                                {% if log["severity"] == "Critical" %}
+
+                                    <span class="danger">
+                                        Critical
+                                    </span>
+
+
+                                {% elif log["severity"] == "Medium" %}
+
+                                    <span class="warning">
+                                        Suspicious
+                                    </span>
+
+
+                                {% else %}
+
+                                    <span class="safe">
+                                        Normal
+                                    </span>
+
+                                {% endif %}
+
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                        {% if not logs %}
+
+                        <tr>
+
+                            <td colspan="4">
+                                No security events found.
+                            </td>
+
+                        </tr>
+
+                        {% endif %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</body>
+
+</html>

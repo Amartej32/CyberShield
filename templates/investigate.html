@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Investigation Details - CyberShield</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            🛡️ CyberShield
+        </div>
+
+
+        <nav>
+
+            <a href="/"
+               class="{% if request.path == '/' %}active{% endif %}">
+                Dashboard
+            </a>
+
+            <a href="/logs"
+               class="{% if request.path == '/logs' %}active{% endif %}">
+                Security Logs
+            </a>
+
+            <a href="/add-log"
+               class="{% if request.path == '/add-log' %}active{% endif %}">
+                Add Security Event
+            </a>
+
+            <a href="/threats"
+               class="{% if request.path == '/threats' %}active{% endif %}">
+                Threats
+            </a>
+
+            <a href="/investigations"
+               class="{% if request.path == '/investigations' or request.path.startswith('/investigate/') %}active{% endif %}">
+                Investigations
+            </a>
+
+            <a href="/reports"
+               class="{% if request.path == '/reports' %}active{% endif %}">
+                Reports
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- Main Content -->
+
+    <main class="main-content">
+
+
+        <!-- Header -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Investigation Details
+                </h1>
+
+                <p>
+                    Analyze and update the selected security event.
+                </p>
+
+            </div>
+
+
+            <div class="system-status">
+                ● System Online
+            </div>
+
+        </header>
+
+
+        <!-- Investigation Details -->
+
+        <section class="recent-events">
+
+            <div class="section-header">
+
+                <h2>
+                    Security Event #{{ investigation["id"] }}
+                </h2>
+
+                <a href="/investigations">
+                    ← Back to Investigations
+                </a>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <tbody>
+
+                        <tr>
+
+                            <th>
+                                Event
+                            </th>
+
+                            <td>
+                                {{ investigation["event"] }}
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <th>
+                                Source IP
+                            </th>
+
+                            <td>
+                                {{ investigation["ip_address"] }}
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <th>
+                                Severity
+                            </th>
+
+                            <td>
+
+                                {% if investigation["severity"] == "Critical" %}
+
+                                    <span class="danger">
+                                        Critical
+                                    </span>
+
+                                {% elif investigation["severity"] == "Medium" %}
+
+                                    <span class="warning">
+                                        Medium
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="safe">
+                                        {{ investigation["severity"] }}
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <th>
+                                Detected At
+                            </th>
+
+                            <td>
+                                {{ investigation["timestamp"] }}
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <th>
+                                Current Status
+                            </th>
+
+                            <td>
+
+                                {% if investigation["investigation_status"] == "Resolved" %}
+
+                                    <span class="safe">
+                                        Resolved
+                                    </span>
+
+                                {% elif investigation["investigation_status"] == "Investigating" %}
+
+                                    <span class="warning">
+                                        Investigating
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="danger">
+                                        Open
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Update Status -->
+
+        <section class="form-section">
+
+            <h2>
+                Update Investigation Status
+            </h2>
+
+
+            <form
+                method="POST"
+                action="/investigate/{{ investigation['id'] }}/status"
+            >
+
+                <label for="status">
+                    Investigation Status
+                </label>
+
+
+                <select
+                    id="status"
+                    name="status"
+                    required
+                >
+
+                    <option
+                        value="Open"
+                        {% if investigation["investigation_status"] == "Open" %}
+                            selected
+                        {% endif %}
+                    >
+                        Open
+                    </option>
+
+
+                    <option
+                        value="Investigating"
+                        {% if investigation["investigation_status"] == "Investigating" %}
+                            selected
+                        {% endif %}
+                    >
+                        Investigating
+                    </option>
+
+
+                    <option
+                        value="Resolved"
+                        {% if investigation["investigation_status"] == "Resolved" %}
+                            selected
+                        {% endif %}
+                    >
+                        Resolved
+                    </option>
+
+                </select>
+
+
+                <button type="submit">
+                    Update Status
+                </button>
+
+            </form>
+
+        </section>
+
+
+    </main>
+
+</body>
+
+</html>
