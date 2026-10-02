@@ -1,41 +1,72 @@
 # CyberShield - Mini SIEM
 
-CyberShield is a beginner-friendly Security Information and Event Management (SIEM) web application built with Flask and SQLite.
+CyberShield is a beginner-friendly Security Information and Event Management (SIEM) web application built with Python, Flask, and SQLite.
 
-It provides a simple environment for monitoring security events, identifying potential threats, investigating suspicious activity, and viewing security analytics.
+It provides a simple environment for monitoring security events, identifying potential threats, investigating suspicious activity, tracking investigation status, and viewing security analytics.
 
 ## Live Demo
 
-**CyberShield is deployed as a public web application on Render.**
+[Open CyberShield Live Demo](https://cybershield-0f0u.onrender.com/)
 
-> Replace the URL below with your actual Render URL.
-
-https://cybershield-0f0u.onrender.com/
-
-## Features
+## Project Highlights
 
 * Security monitoring dashboard
 * Security event logging
-* Threat detection based on event severity
-* Security investigation workflow
+* Threat detection based on severity
+* Investigation workflow for suspicious events
 * Investigation status tracking
-* Reports and analytics
+* Reports and security analytics
 * Recent security event monitoring
+* Source IP tracking
 * Dark cybersecurity-themed interface
-* Public web deployment
+* Public cloud deployment
+
+## Dashboard Preview
+
+A dashboard screenshot can be added here:
+
+```text
+screenshots/dashboard.png
+```
+
+## Security Workflow
+
+```text
+Security Event
+      |
+      v
+Event Logging
+      |
+      v
+Severity Classification
+      |
+      v
+Threat Detection
+      |
+      v
+Security Investigation
+      |
+      v
+Status Tracking
+      |
+      v
+Reports & Analytics
+```
 
 ## Technologies Used
 
-* Python
-* Flask
-* SQLite
-* HTML
-* CSS
-* JavaScript
-* Chart.js
-* Git
-* GitHub
-* Render
+| Technology | Purpose                   |
+| ---------- | ------------------------- |
+| Python     | Backend programming       |
+| Flask      | Web application framework |
+| SQLite     | Security event database   |
+| HTML       | Page structure            |
+| CSS        | User interface styling    |
+| JavaScript | Interactive functionality |
+| Chart.js   | Analytics visualization   |
+| Git        | Version control           |
+| GitHub     | Source code hosting       |
+| Render     | Cloud deployment          |
 
 ## Project Structure
 
@@ -101,7 +132,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-### 7. Open in browser
+### 7. Open in your browser
 
 ```text
 http://127.0.0.1:5000
@@ -114,16 +145,16 @@ CyberShield allows users to:
 * Record suspicious security events
 * Track source IP addresses
 * Categorize events by severity
-* Identify medium and critical security events
+* Identify medium and critical events
 * Investigate suspicious activity
 * Track investigation progress
 * Review security activity through reports and analytics
 
 ## Project Goal
 
-The goal of CyberShield is to provide a simple learning environment for understanding the basic workflow of a Security Information and Event Management system.
+The goal of CyberShield is to provide a practical learning environment for understanding the basic workflow of a Security Information and Event Management system.
 
-The project demonstrates how security events can be collected, categorized, investigated, and presented through a web-based dashboard.
+The project demonstrates how security events can be collected, categorized, investigated, and presented through a web-based security dashboard.
 
 ## Future Improvements
 
